@@ -36,4 +36,4 @@ jobs:
         context: .
         platforms: linux/arm64
         push: true
-        tags: ghcr.io/${{ github.repository }}:latest
+        tags: ghcr.io/${{ tolower(github.repository) }}:latest
