@@ -1,9 +1,7 @@
 #!/bin/sh
 set -e
 
-# DÒNG LỆNH DEBUG: Chuyển hướng toàn bộ output và lỗi vào file log
-exec > /tmp/entrypoint_debug.log 2>&1
-
+# Chờ 2 giây để interface mạng eth0 sẵn sàng
 sleep 2
 
 # === PHẦN 1: TỰ ĐỘNG THÊM 1000 ĐỊA CHỈ IP VÀO CONTAINER ===
@@ -13,9 +11,10 @@ for i in $(seq 1 $TOTAL_IPS); do
     SUBNET_B=$(((i - 1) / 253))
     HOST=$(((i - 1) % 253 + 2))
     IP_ADDR="10.10.${SUBNET_B}.${HOST}/32"
-    ip addr add $IP_ADDR dev eth0
+    /sbin/ip addr add $IP_ADDR dev eth0
 done
 echo "--- IP address configuration complete ---"
+
 
 # === PHẦN 2: TỰ ĐỘNG TẠO FILE CONFIG 3PROXY ===
 CONFIG_FILE="/etc/3proxy/3proxy.cfg"
@@ -60,6 +59,7 @@ for i in $(seq 1 $TOTAL_PROXIES); do
     echo "socks -n -p${PORT} -i0.0.0.0 -e${EXTERNAL_IP}" >> $CONFIG_FILE
 done
 echo "--- Config generation complete ---"
+
 
 # === PHẦN 3: KHỞI CHẠY 3PROXY ===
 echo "--- Starting 3proxy service ---"
