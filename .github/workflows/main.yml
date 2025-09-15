@@ -1,10 +1,9 @@
 name: Build and Push Docker Image
 
-# Chạy tự động mỗi khi bạn đẩy code lên nhánh main
 on:
   push:
     branches: [ "main" ]
-  workflow_dispatch: # Cho phép chạy thủ công
+  workflow_dispatch:
 
 jobs:
   build-and-push:
@@ -17,6 +16,11 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v3
 
+    # BƯỚC MỚI: Chuyển đổi tên repository thành chữ thường
+    - name: Convert repository name to lowercase
+      id: string-actions
+      run: echo "repo_lowercase=$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]')" >> $GITHUB_OUTPUT
+    
     - name: Set up QEMU
       uses: docker/setup-qemu-action@v2
 
@@ -36,4 +40,5 @@ jobs:
         context: .
         platforms: linux/arm64
         push: true
-        tags: ghcr.io/${{ tolower(github.repository) }}:latest
+        # SỬA LỖI Ở ĐÂY: Dùng biến chữ thường đã được tạo ở bước trên
+        tags: ghcr.io/${{ steps.string-actions.outputs.repo_lowercase }}:latest
