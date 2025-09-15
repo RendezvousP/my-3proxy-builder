@@ -9,7 +9,7 @@ RUN wget https://github.com/3proxy/3proxy/releases/download/0.9.5/3proxy-0.9.5.a
     tar -xzf /tmp/3proxy.tar.gz -C /usr/local/bin/ --strip-components=1 bin/3proxy
 
 # Sao chép file entrypoint của bạn bạn vào image
-COPY "entrypoint - script multi ip.sh" /entrypoint.sh
+COPY entrypoint.sh /entrypoint.sh
 
 # Cấp quyền thực thi
 RUN chmod +x /usr/local/bin/3proxy && \
@@ -17,3 +17,4 @@ RUN chmod +x /usr/local/bin/3proxy && \
 
 # Chỉ định lệnh sẽ chạy khi container khởi động
 ENTRYPOINT ["/entrypoint.sh"]
+
