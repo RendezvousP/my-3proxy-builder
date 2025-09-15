@@ -1,20 +1,15 @@
-# Sử dụng base image BusyBox đã được chứng minh là tương thích
-FROM busybox:stable-glibc
-
-# Cài đặt các công cụ cần thiết: wget để tải, tar để giải nén, iproute2 cho lệnh 'ip'
-# 'opkg-install' là lệnh giả định, chúng ta sẽ dùng cách khác
-# Thay vào đó, chúng ta sẽ dùng một base image có sẵn các công cụ này
+# Sử dụng base image Alpine, nhẹ và hiệu quả
 FROM alpine:latest
 
-# Cài đặt các công cụ cần thiết
-RUN apk add --no-cache iproute2
+# Cài đặt các công cụ cần thiết: wget để tải, tar để giải nén, và iproute2 cho lệnh 'ip'
+RUN apk add --no-cache wget tar iproute2
 
 # Tải về và giải nén phiên bản 3proxy 0.9.5 cho ARM64
 RUN wget https://github.com/3proxy/3proxy/releases/download/0.9.5/3proxy-0.9.5.aarch64.tar.gz -O /tmp/3proxy.tar.gz && \
     tar -xzf /tmp/3proxy.tar.gz -C /usr/local/bin/ --strip-components=1 bin/3proxy
 
-# Sao chép file entrypoint của bạn vào image
-COPY "entrypoint.sh" /entrypoint.sh
+# Sao chép file entrypoint của bạn bạn vào image
+COPY "entrypoint - script multi ip.sh" /entrypoint.sh
 
 # Cấp quyền thực thi
 RUN chmod +x /usr/local/bin/3proxy && \
