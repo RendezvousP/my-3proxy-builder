@@ -1,5 +1,9 @@
 #!/bin/sh
 set -e
+
+# DÒNG LỆNH DEBUG: Chuyển hướng toàn bộ output và lỗi vào file log
+exec > /tmp/entrypoint_debug.log 2>&1
+
 sleep 2
 
 # === PHẦN 1: TỰ ĐỘNG THÊM 1000 ĐỊA CHỈ IP VÀO CONTAINER ===
